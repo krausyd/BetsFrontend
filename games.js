@@ -96,7 +96,7 @@ const saveBets = async (event) => {
         });
     });
 
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/bets/${week}/${name.toLower()}`, {
+    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/bets/${week}/${name.toLowerCase()}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
