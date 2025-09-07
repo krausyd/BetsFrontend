@@ -10,6 +10,10 @@ div.differences-row {
     display: flex;
     justify-content: space-between;
 }
+div.differences-row div.winner {
+    color: purple;
+    font-weight: bold;
+}
 div.games-label {
     width: 125px;
 }
