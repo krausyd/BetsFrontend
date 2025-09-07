@@ -1,12 +1,12 @@
-div#games, div#differences {
+div#games, div#differences, div#stats {
     width: 250px;
 }
-div.games-title, div.differences-title {
+div.games-title, div.differences-title, div.stats-title {
     display: flex;
     justify-content: space-around;
     font-weight: bold;
 }
-div.differences-row {
+div.differences-row, div.stats-row {
     display: flex;
     justify-content: space-between;
 }
