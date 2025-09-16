@@ -14,7 +14,7 @@ const printDifference = (difference, winner) => {
     const jeffPickElem = document.createElement("div");
     jeffPickElem.innerText = difference["jeff howell"];
     if (winner && difference["jeff howell"].toLowerCase() === winner.toLowerCase()) {
-        josePickElem.className = "winner";
+        jeffPickElem.className = "winner";
     }
     picksElem.appendChild(jeffPickElem);
     gamesElement.appendChild(picksElem);
