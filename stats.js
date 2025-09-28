@@ -43,7 +43,8 @@ fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/picks_stats`,
         jeffElem.innerText = element["jeff howell"];
         rowElem.appendChild(jeffElem);
         const winnerElem = document.createElement("div");
-        winnerElem.innerText = element.winner;
+        winnerElem.innerText = element.winner.toLowerCase() === "jeff howell" ? "jeff" : element.winner;
+        winnerElem.className = "stats-winner";
         rowElem.appendChild(winnerElem);
         statsElement.appendChild(rowElem);
         
