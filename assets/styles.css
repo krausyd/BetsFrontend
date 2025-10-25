@@ -1,0 +1,75 @@
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #013369;
+}
+nav {
+    display: flex;
+}
+nav img.nfl-logo {
+    width: 100px;
+    height: 100px;
+}   
+nav ul {
+    font-weight: bold;
+    padding: 0px;
+    padding-top: 50px;
+}
+nav ul li {
+    display: inline;
+    padding: 10px;
+}
+div#games, div#differences, div#stats {
+    width: 250px;
+}
+div.games-title, div.differences-title, div.stats-title {
+    display: flex;
+    justify-content: space-around;
+    font-weight: bold;
+    color: #D50A0A;
+}
+div.differences-row, div.stats-row {
+    display: flex;
+    justify-content: space-between;
+}
+div.differences-row div.winner {
+    color: purple;
+    font-weight: bold;
+}
+div.games-label {
+    width: 125px;
+}
+div.individual-game {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+div.stats-winner {
+    text-transform: capitalize;
+}
+
+label.form-label {
+    font-weight: bold;
+    color: #D50A0A;
+}
+section {
+    padding-top: 10px;
+    width: 400px;
+    padding-left: 50px;
+}
+div.form-div {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+}
+div#games {
+    padding-top: 10px;
+}
+div#error {
+    color: red;
+    font-weight: bold;
+    padding-top: 5px;
+}
+
+a:hover, a:visited, a:active {
+    color: #013369;
+}

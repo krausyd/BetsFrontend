@@ -25,7 +25,7 @@ const printAllGames = (games) => {
     titleDiv.append(visitorLabel);
     const homeLabel = document.createElement("div");
     homeLabel.innerHTML = "Home";
-    homeLabel.className = "game-label";
+    homeLabel.className = "game -label";
     titleDiv.append(homeLabel);
     gamesElement.append(titleDiv);
     games.forEach( game => {
