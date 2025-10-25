@@ -35,6 +35,7 @@ fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/picks_stats`,
         rowElem.className = "stats-row";
         const weekElem = document.createElement("div");
         weekElem.innerText = element.week;
+        weekElem.className = "week";
         rowElem.appendChild(weekElem);
         const joseElem = document.createElement("div");
         joseElem.innerText = element["jose"];

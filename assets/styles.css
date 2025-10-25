@@ -19,6 +19,7 @@ nav ul li {
     padding: 10px;
 }
 div#games, div#differences, div#stats {
+    padding-top: 10px;
     width: 250px;
 }
 div.games-title, div.differences-title, div.stats-title {
@@ -29,7 +30,7 @@ div.games-title, div.differences-title, div.stats-title {
 }
 div.differences-row, div.stats-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 div.differences-row div.winner {
     color: purple;
@@ -61,15 +62,15 @@ div.form-div {
     justify-content: space-between;
     width: 300px;
 }
-div#games {
-    padding-top: 10px;
-}
 div#error {
     color: red;
     font-weight: bold;
     padding-top: 5px;
 }
-
 a:hover, a:visited, a:active {
     color: #013369;
+}
+div.stats-title div, div.stats-row div {
+    width: 20%;
+    text-align: center;
 }
