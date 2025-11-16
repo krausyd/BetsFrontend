@@ -22,17 +22,21 @@ div#games, div#differences, div#stats {
     padding-top: 10px;
     width: 250px;
 }
-div.games-title, div.differences-title, div.stats-title {
+div.games-title, div.differences-title, div.stats-title, div.performance-title {
     display: flex;
     justify-content: space-around;
     font-weight: bold;
     color: #D50A0A;
 }
-div.differences-row, div.stats-row {
+div.differences-row, div.stats-row, div.performance-row {
     display: flex;
     justify-content: space-around;
 }
-div.differences-row div.winner {
+div.performance-title div, div.performance-row div {
+    width: 33%;
+    text-align: center;
+}
+div.differences-row div.winner, div.performance-row div.winner {
     color: purple;
     font-weight: bold;
 }
