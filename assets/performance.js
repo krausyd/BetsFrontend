@@ -27,7 +27,7 @@ const printPicksVsWinner = (pick, winner) => {
     }
     picksElem.appendChild(jeffPickElem);
     const winnerElem = document.createElement("div");
-    winnerElem.innerText = winner;
+    winnerElem.innerText = winner || "";
     picksElem.appendChild(winnerElem);
     gamesElement.appendChild(picksElem);
 };
