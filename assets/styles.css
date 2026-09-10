@@ -55,6 +55,10 @@ div.performance-title div, div.performance-row div {
     width: 33%;
     text-align: center;
 }
+div.differences-title div, div.differences-row div {
+    width: 50%;
+    text-align: center;
+}
 div.differences-row div.winner, div.performance-row div.winner {
     color: purple;
     font-weight: bold;
