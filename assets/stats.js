@@ -37,7 +37,7 @@ const printStats = (data) => {
         rowElem.appendChild(joseElem);
         const winnerElem = document.createElement("div");
         winnerElem.innerText = element.winner;
-        winnerElem.className = "stats-winner";
+        winnerElem.className = element.winner === "Tie" ? "stats-winner no-pick" : "stats-winner";
         rowElem.appendChild(winnerElem);
         statsElement.appendChild(rowElem);
     });

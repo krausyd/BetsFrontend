@@ -66,7 +66,7 @@ div.differences-row div.winner, div.performance-row div.winner {
 div.differences-row div.winner::before, div.performance-row div.winner::before {
     content: "\2713  ";
 }
-div.differences-row div.no-pick {
+div.no-pick {
     color: #888;
     font-style: italic;
 }
