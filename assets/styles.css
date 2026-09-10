@@ -59,6 +59,10 @@ div.differences-row div.winner, div.performance-row div.winner {
     color: purple;
     font-weight: bold;
 }
+div.differences-row div.no-pick {
+    color: #888;
+    font-style: italic;
+}
 div.games-label {
     width: 140px;
 }
@@ -157,6 +161,18 @@ div#error {
     color: red;
     font-weight: bold;
     padding-top: 5px;
+}
+div.not-found {
+    padding-top: 30px;
+    text-align: center;
+}
+div.not-found h1 {
+    font-size: 4em;
+    color: #D50A0A;
+    margin: 0;
+}
+div.not-found p {
+    font-size: 1.1em;
 }
 a:hover, a:visited, a:active {
     color: #013369;

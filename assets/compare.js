@@ -19,13 +19,17 @@ const printDifference = (difference, winner) => {
     picksElem.className = "differences-row";
     const jeffPickElem = document.createElement("div");
     jeffPickElem.innerText = difference["jeff"];
-    if (winner && difference["jeff"].toLowerCase() === winner.toLowerCase()) {
+    if (difference["jeff"] === "No pick yet") {
+        jeffPickElem.className = "no-pick";
+    } else if (winner && difference["jeff"].toLowerCase() === winner.toLowerCase()) {
         jeffPickElem.className = "winner";
     }
     picksElem.appendChild(jeffPickElem);
     const josePickElem = document.createElement("div");
     josePickElem.innerText = difference["jose"];
-    if (winner && difference["jose"].toLowerCase() === winner.toLowerCase()) {
+    if (difference["jose"] === "No pick yet") {
+        josePickElem.className = "no-pick";
+    } else if (winner && difference["jose"].toLowerCase() === winner.toLowerCase()) {
         josePickElem.className = "winner";
     }
     picksElem.appendChild(josePickElem);
