@@ -17,30 +17,30 @@ document.getElementById("season").innerText = `Season ${YEAR}`;
 const printDifference = (difference, winner) => {
     const picksElem = document.createElement("div");
     picksElem.className = "differences-row";
-    const josePickElem = document.createElement("div");
-    josePickElem.innerText = difference["jose"];
-    if (winner && difference["jose"].toLowerCase() === winner.toLowerCase()) {
-        josePickElem.className = "winner";
-    }
-    picksElem.appendChild(josePickElem);
     const jeffPickElem = document.createElement("div");
     jeffPickElem.innerText = difference["jeff"];
     if (winner && difference["jeff"].toLowerCase() === winner.toLowerCase()) {
         jeffPickElem.className = "winner";
     }
     picksElem.appendChild(jeffPickElem);
+    const josePickElem = document.createElement("div");
+    josePickElem.innerText = difference["jose"];
+    if (winner && difference["jose"].toLowerCase() === winner.toLowerCase()) {
+        josePickElem.className = "winner";
+    }
+    picksElem.appendChild(josePickElem);
     gamesElement.appendChild(picksElem);
 };
 
 const printDifferences = (differences, winners) => {
     const differencesTitleElem = document.createElement("div");
     differencesTitleElem.className = "differences-title";
-    const joseTitleElem = document.createElement("div");
-    joseTitleElem.innerText = "Jose";
-    differencesTitleElem.appendChild(joseTitleElem);
     const jeffTitleElem = document.createElement("div");
     jeffTitleElem.innerText = "Jeff";
     differencesTitleElem.appendChild(jeffTitleElem);
+    const joseTitleElem = document.createElement("div");
+    joseTitleElem.innerText = "Jose";
+    differencesTitleElem.appendChild(joseTitleElem);
     gamesElement.appendChild(differencesTitleElem);
     differences.forEach(element => {
         const winner = winners.find(item => item.game == element.game);

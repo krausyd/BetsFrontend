@@ -89,6 +89,60 @@ label.form-label {
     font-weight: bold;
     color: #D50A0A;
 }
+select {
+    font-family: inherit;
+    font-size: 1em;
+    color: #013369;
+    background-color: #fff;
+    border: 2px solid #013369;
+    border-radius: 6px;
+    padding: 6px 32px 6px 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%23013369'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+select:hover {
+    border-color: #D50A0A;
+}
+select:focus {
+    outline: none;
+    border-color: #D50A0A;
+    box-shadow: 0 0 0 3px rgba(213, 10, 10, 0.15);
+}
+input[type="button"] {
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #013369;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 20px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+input[type="button"]:hover:not(:disabled) {
+    background-color: #D50A0A;
+}
+input[type="button"]:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+input[type="checkbox"] {
+    accent-color: #013369;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+}
 section {
     padding-top: 10px;
     width: 400px;

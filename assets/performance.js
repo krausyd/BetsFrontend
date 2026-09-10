@@ -26,18 +26,18 @@ const getWinners = async (week) => {
 const printPicksVsWinner = (pick, winner) => {
     const picksElem = document.createElement("div");
     picksElem.className = "performance-row";
-    const josePickElem = document.createElement("div");
-    josePickElem.innerText = pick["jose"];
-    if (winner && pick["jose"].toLowerCase() === winner.toLowerCase()) {
-        josePickElem.className = "winner";
-    }
-    picksElem.appendChild(josePickElem);
     const jeffPickElem = document.createElement("div");
     jeffPickElem.innerText = pick["jeff"];
     if (winner && pick["jeff"].toLowerCase() === winner.toLowerCase()) {
         jeffPickElem.className = "winner";
     }
     picksElem.appendChild(jeffPickElem);
+    const josePickElem = document.createElement("div");
+    josePickElem.innerText = pick["jose"];
+    if (winner && pick["jose"].toLowerCase() === winner.toLowerCase()) {
+        josePickElem.className = "winner";
+    }
+    picksElem.appendChild(josePickElem);
     const winnerElem = document.createElement("div");
     winnerElem.innerText = winner || "";
     picksElem.appendChild(winnerElem);
@@ -47,12 +47,12 @@ const printPicksVsWinner = (pick, winner) => {
 const printPerformance = (picks, winners) => {
     const performanceTitleElem = document.createElement("div");
     performanceTitleElem.className = "performance-title";
-    const joseTitleElem = document.createElement("div");
-    joseTitleElem.innerText = "Jose";
-    performanceTitleElem.appendChild(joseTitleElem);
     const jeffTitleElem = document.createElement("div");
     jeffTitleElem.innerText = "Jeff";
     performanceTitleElem.appendChild(jeffTitleElem);
+    const joseTitleElem = document.createElement("div");
+    joseTitleElem.innerText = "Jose";
+    performanceTitleElem.appendChild(joseTitleElem);
     const winnerTitleElem = document.createElement("div");
     winnerTitleElem.innerText = "Winner";
     performanceTitleElem.appendChild(winnerTitleElem);
