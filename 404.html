@@ -23,15 +23,6 @@
             <p>This page doesn't exist. Check the link, or pick one of the pages above.</p>
         </div>
     </section>
-    <script>
-        // Same season-year logic used elsewhere on the site, inlined here
-        // since this page doesn't load the full games.js script.
-        const getCurrentSeasonYear = () => {
-            const now = new Date();
-            const month = now.getMonth(); // 0 = January
-            return month <= 1 ? now.getFullYear() - 1 : now.getFullYear();
-        };
-        document.getElementById("season").innerText = `Season ${getCurrentSeasonYear()}`;
-    </script>
+    <script src="./assets/common.js"></script>
 </body>
 </html>

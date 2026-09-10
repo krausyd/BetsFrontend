@@ -2,18 +2,6 @@ const gamesElement = document.getElementById("games");
 const errorElement = document.getElementById("error");
 let week = "";
 
-// The NFL season is named after the year it starts in, but runs into
-// January/February of the following calendar year. So in Jan/Feb we're
-// still in the season that started the previous year.
-const getCurrentSeasonYear = () => {
-    const now = new Date();
-    const month = now.getMonth(); // 0 = January
-    return month <= 1 ? now.getFullYear() - 1 : now.getFullYear();
-};
-const YEAR = getCurrentSeasonYear().toString();
-
-document.getElementById("season").innerText = `Season ${YEAR}`;
-
 // NFL scheduling is anchored to US Eastern time -- a Sunday night game that
 // kicks off after midnight UTC is still a "Sunday" game, not a "Monday" one.
 // This mirrors the same logic the backend uses.
@@ -60,8 +48,8 @@ const loadWeek = async () => {
     }
 
     const [gamesResponse, picksResponse] = await Promise.all([
-        fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/games/${YEAR}/${week}`),
-        fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/picks/${YEAR}/${week}/${name.toLowerCase()}`),
+        fetch(`${API_BASE_URL}/games/${YEAR}/${week}`),
+        fetch(`${API_BASE_URL}/picks/${YEAR}/${week}/${name.toLowerCase()}`),
     ]);
 
     if (gamesResponse.status !== 200) {
@@ -69,12 +57,10 @@ const loadWeek = async () => {
         return;
     }
 
-    const games = await gamesResponse.json();
-    games.sort((a, b) => {
-        if (!a.kickoff_utc) return 1;
-        if (!b.kickoff_utc) return -1;
-        return new Date(a.kickoff_utc) - new Date(b.kickoff_utc);
-    });
+    const gamesUnsorted = await gamesResponse.json();
+    // games are sorted using themselves as the kickoff lookup, since each
+    // game already carries its own kickoff_utc
+    const games = sortByKickoff(gamesUnsorted, gamesUnsorted);
 
     const existingPicks = picksResponse.status === 200 ? await picksResponse.json() : [];
     const existingPicksByGame = Object.fromEntries(existingPicks.map((pick) => [pick.game, pick.winner]));
@@ -188,7 +174,7 @@ const saveBets = async (event) => {
         });
     });
 
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/bets/${YEAR}/${week}/${name.toLowerCase()}`, {
+    const response = await fetch(`${API_BASE_URL}/bets/${YEAR}/${week}/${name.toLowerCase()}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

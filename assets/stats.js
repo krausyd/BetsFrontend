@@ -1,18 +1,6 @@
 const statsElement = document.getElementById("stats");
 const errorElement = document.getElementById("error");
 
-// The NFL season is named after the year it starts in, but runs into
-// January/February of the following calendar year. So in Jan/Feb we're
-// still in the season that started the previous year.
-const getCurrentSeasonYear = () => {
-    const now = new Date();
-    const month = now.getMonth(); // 0 = January
-    return month <= 1 ? now.getFullYear() - 1 : now.getFullYear();
-};
-const YEAR = getCurrentSeasonYear().toString();
-
-document.getElementById("season").innerText = `Season ${YEAR}`;
-
 const requestBody = {
     name1: 'jose',
     name2: 'jeff',
@@ -55,7 +43,7 @@ const printStats = (data) => {
     });
 };
 
-fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/picks_stats/${YEAR}`, {
+fetch(`${API_BASE_URL}/picks_stats/${YEAR}`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

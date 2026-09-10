@@ -2,18 +2,6 @@ const gamesElement = document.getElementById("differences");
 const errorElement = document.getElementById("error");
 let week = "";
 
-// The NFL season is named after the year it starts in, but runs into
-// January/February of the following calendar year. So in Jan/Feb we're
-// still in the season that started the previous year.
-const getCurrentSeasonYear = () => {
-    const now = new Date();
-    const month = now.getMonth(); // 0 = January
-    return month <= 1 ? now.getFullYear() - 1 : now.getFullYear();
-};
-const YEAR = getCurrentSeasonYear().toString();
-
-document.getElementById("season").innerText = `Season ${YEAR}`;
-
 const printDifference = (difference, winner) => {
     const picksElem = document.createElement("div");
     picksElem.className = "differences-row";
@@ -46,19 +34,10 @@ const printDifferences = (differences, winners) => {
     joseTitleElem.innerText = "Jose";
     differencesTitleElem.appendChild(joseTitleElem);
     gamesElement.appendChild(differencesTitleElem);
-    differences.forEach(element => {
+    sortByKickoff(differences, winners).forEach(element => {
         const winner = winners.find(item => item.game == element.game);
         printDifference(element, winner ? winner.winner : null);
     });
-};
-
-const getWinners = async (week) => {
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/winners/${YEAR}/${week}`);
-    if (response.status === 200) {
-        const winners = await response.json();
-        return winners;
-    }
-    return [];
 };
 
 const selectWeek = async (event) => {
@@ -69,7 +48,7 @@ const selectWeek = async (event) => {
         name1: 'jose',
         name2: 'jeff',
     };
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/compare/${YEAR}/${week}`, {
+    const response = await fetch(`${API_BASE_URL}/compare/${YEAR}/${week}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
