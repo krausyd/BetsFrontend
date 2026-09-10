@@ -35,7 +35,7 @@ nav ul li {
 }
 div#games, div#differences, div#stats {
     padding-top: 10px;
-    width: 250px;
+    width: 390px;
 }
 div#performance {
     padding-top: 25px;
@@ -60,12 +60,26 @@ div.differences-row div.winner, div.performance-row div.winner {
     font-weight: bold;
 }
 div.games-label {
-    width: 125px;
+    width: 140px;
 }
 div.individual-game {
     width: 100%;
+    display: grid;
+    grid-template-columns: 140px 140px 110px;
+    align-items: center;
+}
+div.game-visitor, div.game-home {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+}
+div.game-home {
+    justify-content: flex-end;
+}
+span.game-note {
+    font-size: 0.8em;
+    color: #888;
+    font-style: italic;
+    padding-left: 5px;
 }
 div.stats-winner {
     text-transform: capitalize;
