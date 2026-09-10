@@ -2,13 +2,31 @@ const gamesElement = document.getElementById("games");
 const errorElement = document.getElementById("error");
 let totalGames = 0;
 let week = "";
+
+// The NFL season is named after the year it starts in, but runs into
+// January/February of the following calendar year. So in Jan/Feb we're
+// still in the season that started the previous year.
+const getCurrentSeasonYear = () => {
+    const now = new Date();
+    const month = now.getMonth(); // 0 = January
+    return month <= 1 ? now.getFullYear() - 1 : now.getFullYear();
+};
+const YEAR = getCurrentSeasonYear().toString();
+
+document.getElementById("season").innerText = `Season ${YEAR}`;
+
 const selectWeek = async (event) => {
     gamesElement.innerHTML = "";
     errorElement.innerHTML = "";
     week = event.target.value;
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/games/${week}`);
+    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/games/${YEAR}/${week}`);
     if (response.status === 200) {
         const games = await response.json();
+        games.sort((a, b) => {
+            if (!a.kickoff_utc) return 1;
+            if (!b.kickoff_utc) return -1;
+            return new Date(a.kickoff_utc) - new Date(b.kickoff_utc);
+        });
         totalGames = games.length;
         printAllGames(games);
     } else {
@@ -25,7 +43,7 @@ const printAllGames = (games) => {
     titleDiv.append(visitorLabel);
     const homeLabel = document.createElement("div");
     homeLabel.innerHTML = "Home";
-    homeLabel.className = "game -label";
+    homeLabel.className = "games-label";
     titleDiv.append(homeLabel);
     gamesElement.append(titleDiv);
     games.forEach( game => {
@@ -77,7 +95,7 @@ const saveBets = async (event) => {
     const name = document.getElementById("name").value;
     const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
     if (!name) { 
-        errorElement.innerHTML = "Please write your name before saving";
+        errorElement.innerHTML = "Please select your name before saving";
         event.target.disabled = false;
         return;
     }
@@ -96,19 +114,20 @@ const saveBets = async (event) => {
         });
     });
 
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/bets/${week}/${name.toLowerCase()}`, {
+    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/bets/${YEAR}/${week}/${name.toLowerCase()}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'http://localhost:8080',
         },
         body: JSON.stringify({bets: bets})
     });
     if (response.status === 200) {
         errorElement.innerHTML = "SAVED SUCCESSFULLY!";
     } else {
-        errorElement.innerHTML = response.json().error_message;
+        const errorBody = await response.json();
+        errorElement.innerHTML = errorBody.error_message;
     }
+    event.target.disabled = false;
 }
 
 

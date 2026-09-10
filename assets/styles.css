@@ -3,16 +3,31 @@ body {
     color: #013369;
 }
 nav {
-    display: flex;
+    display: grid;
+    grid-template-columns: 100px max-content;
+    grid-template-rows: auto auto;
+    align-items: center;
 }
 nav img.nfl-logo {
+    grid-column: 1;
+    grid-row: 1 / span 2;
     width: 100px;
     height: 100px;
-}   
+}
+div.season-header {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #013369;
+}
 nav ul {
+    grid-column: 2;
+    grid-row: 2;
     font-weight: bold;
     padding: 0px;
-    padding-top: 50px;
+    margin: 0px;
 }
 nav ul li {
     display: inline;
@@ -20,6 +35,10 @@ nav ul li {
 }
 div#games, div#differences, div#stats {
     padding-top: 10px;
+    width: 250px;
+}
+div#performance {
+    padding-top: 25px;
     width: 250px;
 }
 div.games-title, div.differences-title, div.stats-title, div.performance-title {

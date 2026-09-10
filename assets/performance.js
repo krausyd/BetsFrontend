@@ -2,8 +2,20 @@ const gamesElement = document.getElementById("performance");
 const errorElement = document.getElementById("error");
 let week = "";
 
+// The NFL season is named after the year it starts in, but runs into
+// January/February of the following calendar year. So in Jan/Feb we're
+// still in the season that started the previous year.
+const getCurrentSeasonYear = () => {
+    const now = new Date();
+    const month = now.getMonth(); // 0 = January
+    return month <= 1 ? now.getFullYear() - 1 : now.getFullYear();
+};
+const YEAR = getCurrentSeasonYear().toString();
+
+document.getElementById("season").innerText = `Season ${YEAR}`;
+
 const getWinners = async (week) => {
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/winners/${week}`);
+    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/winners/${YEAR}/${week}`);
     if (response.status === 200) {
         const winners = await response.json();
         return winners;
@@ -21,8 +33,8 @@ const printPicksVsWinner = (pick, winner) => {
     }
     picksElem.appendChild(josePickElem);
     const jeffPickElem = document.createElement("div");
-    jeffPickElem.innerText = pick["jeff howell"];
-    if (winner && pick["jeff howell"].toLowerCase() === winner.toLowerCase()) {
+    jeffPickElem.innerText = pick["jeff"];
+    if (winner && pick["jeff"].toLowerCase() === winner.toLowerCase()) {
         jeffPickElem.className = "winner";
     }
     picksElem.appendChild(jeffPickElem);
@@ -46,8 +58,8 @@ const printPerformance = (picks, winners) => {
     performanceTitleElem.appendChild(winnerTitleElem);
     gamesElement.appendChild(performanceTitleElem);
     picks.forEach(element => {
-        winner = winners.filter(item => item.game == element.game)[0];
-        printPicksVsWinner(element, winner.winner);
+        const winner = winners.find(item => item.game == element.game);
+        printPicksVsWinner(element, winner ? winner.winner : null);
     });
 };
 
@@ -57,13 +69,12 @@ const selectWeek = async (event) => {
     week = event.target.value;
     const requestBody = {
         name1: 'jose',
-        name2: 'jeff howell',
+        name2: 'jeff',
     };
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/sames/${week}`, {
+    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/sames/${YEAR}/${week}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'http://localhost:8080',
         },
         body: JSON.stringify(requestBody)
     });
@@ -72,7 +83,8 @@ const selectWeek = async (event) => {
         const winners = await getWinners(week);
         printPerformance(sames, winners);
     } else {
-        errorElement.innerHTML = await response.json().error_message;
+        const errorBody = await response.json();
+        errorElement.innerHTML = errorBody.error_message;
     }
 };
 

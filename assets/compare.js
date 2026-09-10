@@ -2,6 +2,18 @@ const gamesElement = document.getElementById("differences");
 const errorElement = document.getElementById("error");
 let week = "";
 
+// The NFL season is named after the year it starts in, but runs into
+// January/February of the following calendar year. So in Jan/Feb we're
+// still in the season that started the previous year.
+const getCurrentSeasonYear = () => {
+    const now = new Date();
+    const month = now.getMonth(); // 0 = January
+    return month <= 1 ? now.getFullYear() - 1 : now.getFullYear();
+};
+const YEAR = getCurrentSeasonYear().toString();
+
+document.getElementById("season").innerText = `Season ${YEAR}`;
+
 const printDifference = (difference, winner) => {
     const picksElem = document.createElement("div");
     picksElem.className = "differences-row";
@@ -12,8 +24,8 @@ const printDifference = (difference, winner) => {
     }
     picksElem.appendChild(josePickElem);
     const jeffPickElem = document.createElement("div");
-    jeffPickElem.innerText = difference["jeff howell"];
-    if (winner && difference["jeff howell"].toLowerCase() === winner.toLowerCase()) {
+    jeffPickElem.innerText = difference["jeff"];
+    if (winner && difference["jeff"].toLowerCase() === winner.toLowerCase()) {
         jeffPickElem.className = "winner";
     }
     picksElem.appendChild(jeffPickElem);
@@ -31,13 +43,13 @@ const printDifferences = (differences, winners) => {
     differencesTitleElem.appendChild(jeffTitleElem);
     gamesElement.appendChild(differencesTitleElem);
     differences.forEach(element => {
-        winner = winners.filter(item => item.game == element.game)[0];
-        printDifference(element, winner.winner);
+        const winner = winners.find(item => item.game == element.game);
+        printDifference(element, winner ? winner.winner : null);
     });
 };
 
 const getWinners = async (week) => {
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/winners/${week}`);
+    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/winners/${YEAR}/${week}`);
     if (response.status === 200) {
         const winners = await response.json();
         return winners;
@@ -50,15 +62,13 @@ const selectWeek = async (event) => {
     errorElement.innerHTML = "";
     week = event.target.value;
     const requestBody = {
-        week: week,
         name1: 'jose',
-        name2: 'jeff howell',
+        name2: 'jeff',
     };
-    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/compare/${week}`, {
+    const response = await fetch(`https://haqfcp8xdl.execute-api.us-east-1.amazonaws.com/prod/compare/${YEAR}/${week}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'http://localhost:8080',
         },
         body: JSON.stringify(requestBody)
     });
@@ -67,7 +77,8 @@ const selectWeek = async (event) => {
         const winners = await getWinners(week);
         printDifferences(differences, winners);
     } else {
-        errorElement.innerHTML = await response.json().error_message;
+        const errorBody = await response.json();
+        errorElement.innerHTML = errorBody.error_message;
     }
 };
 
