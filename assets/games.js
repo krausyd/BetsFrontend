@@ -2,35 +2,15 @@ const gamesElement = document.getElementById("games");
 const errorElement = document.getElementById("error");
 let week = "";
 
-// NFL scheduling is anchored to US Eastern time -- a Sunday night game that
-// kicks off after midnight UTC is still a "Sunday" game, not a "Monday" one.
-// This mirrors the same logic the backend uses.
-const GAME_DAY_TIMEZONE = "America/New_York";
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
 
-const getGameDayKey = (kickoffIso) => {
-    const date = new Date(kickoffIso);
-    return new Intl.DateTimeFormat("en-CA", { timeZone: GAME_DAY_TIMEZONE, year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
-};
-
-// Groups games by day and finds each day's deadline: 2 hours before that
-// day's earliest kickoff. Games with no usable kickoff_utc are left out.
-const getDayDeadlinesMs = (games) => {
-    const earliestKickoffByDay = {};
-    games.forEach((game) => {
-        if (!game.kickoff_utc) return;
-        const kickoffMs = new Date(game.kickoff_utc).getTime();
-        if (isNaN(kickoffMs)) return;
-        const dayKey = getGameDayKey(game.kickoff_utc);
-        if (!(dayKey in earliestKickoffByDay) || kickoffMs < earliestKickoffByDay[dayKey]) {
-            earliestKickoffByDay[dayKey] = kickoffMs;
-        }
-    });
-    const deadlinesByDay = {};
-    Object.keys(earliestKickoffByDay).forEach((dayKey) => {
-        deadlinesByDay[dayKey] = earliestKickoffByDay[dayKey] - TWO_HOURS_MS;
-    });
-    return deadlinesByDay;
+// A game's pick deadline is 2 hours before its own kickoff. Returns null if
+// there's no usable kickoff_utc to compute a deadline from.
+const getGameDeadlineMs = (game) => {
+    if (!game.kickoff_utc) return null;
+    const kickoffMs = new Date(game.kickoff_utc).getTime();
+    if (isNaN(kickoffMs)) return null;
+    return kickoffMs - TWO_HOURS_MS;
 };
 
 const nameElement = document.getElementById("name");
@@ -64,12 +44,11 @@ const loadWeek = async () => {
 
     const existingPicks = picksResponse.status === 200 ? await picksResponse.json() : [];
     const existingPicksByGame = Object.fromEntries(existingPicks.map((pick) => [pick.game, pick.winner]));
-    const dayDeadlinesMs = getDayDeadlinesMs(games);
 
-    printAllGames(games, existingPicksByGame, dayDeadlinesMs);
+    printAllGames(games, existingPicksByGame);
 };
 
-const printAllGames = (games, existingPicksByGame, dayDeadlinesMs) => {
+const printAllGames = (games, existingPicksByGame) => {
     const titleDiv = document.createElement("div");
     titleDiv.className = "games-title";
     const visitorLabel = document.createElement("div");
@@ -82,7 +61,7 @@ const printAllGames = (games, existingPicksByGame, dayDeadlinesMs) => {
     titleDiv.append(homeLabel);
     gamesElement.append(titleDiv);
     games.forEach( game => {
-        gamesElement.append(printGame(game, existingPicksByGame, dayDeadlinesMs));
+        gamesElement.append(printGame(game, existingPicksByGame));
     });
 
     const saveButton = document.createElement("input");
@@ -92,7 +71,7 @@ const printAllGames = (games, existingPicksByGame, dayDeadlinesMs) => {
     gamesElement.append(saveButton);
 }
 
-const printGame = (game, existingPicksByGame, dayDeadlinesMs) => {
+const printGame = (game, existingPicksByGame) => {
     const gameDiv = document.createElement("div");
     gameDiv.className = "individual-game";
     gameDiv.id = `game_${game.game}`
@@ -100,10 +79,9 @@ const printGame = (game, existingPicksByGame, dayDeadlinesMs) => {
     const existingWinner = existingPicksByGame[game.game];
     let locked = !!existingWinner;
     let lockedReason = existingWinner ? "already picked" : null;
-    if (!locked && game.kickoff_utc) {
-        const dayKey = getGameDayKey(game.kickoff_utc);
-        const deadlineMs = dayDeadlinesMs[dayKey];
-        if (deadlineMs !== undefined && Date.now() > deadlineMs) {
+    if (!locked) {
+        const deadlineMs = getGameDeadlineMs(game);
+        if (deadlineMs !== null && Date.now() > deadlineMs) {
             locked = true;
             lockedReason = "locked";
         }
