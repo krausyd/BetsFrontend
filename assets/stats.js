@@ -1,5 +1,22 @@
 const statsElement = document.getElementById("stats");
 const errorElement = document.getElementById("error");
+const seasonSelectElement = document.getElementById("season-select");
+
+// Earliest season this app has data for. Adjust if you ever backfill
+// something older.
+const EARLIEST_SEASON = 2025;
+
+// Populate the season dropdown: current season down to the earliest one,
+// most recent first. This grows on its own each year since it's based on
+// getCurrentSeasonYear() (from common.js) rather than a hardcoded list.
+const currentSeason = getCurrentSeasonYear();
+for (let year = currentSeason; year >= EARLIEST_SEASON; year--) {
+    const option = document.createElement("option");
+    option.value = year;
+    option.innerText = year;
+    seasonSelectElement.appendChild(option);
+}
+seasonSelectElement.value = currentSeason;
 
 const requestBody = {
     name1: 'jose',
@@ -43,13 +60,16 @@ const printStats = (data) => {
     });
 };
 
-fetch(`${API_BASE_URL}/picks_stats/${YEAR}`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody)
-}).then(async (response) => {
+const loadStats = async (year) => {
+    statsElement.innerHTML = "";
+    errorElement.innerHTML = "";
+    const response = await fetch(`${API_BASE_URL}/picks_stats/${year}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+    });
     if (response.status === 200) {
         const data = await response.json();
         printStats(data);
@@ -57,4 +77,8 @@ fetch(`${API_BASE_URL}/picks_stats/${YEAR}`, {
         const errorBody = await response.json();
         errorElement.innerHTML = errorBody.error_message;
     }
-});
+};
+
+seasonSelectElement.addEventListener("change", (event) => loadStats(event.target.value));
+
+loadStats(currentSeason);
