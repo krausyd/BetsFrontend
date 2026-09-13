@@ -2,15 +2,15 @@ const gamesElement = document.getElementById("games");
 const errorElement = document.getElementById("error");
 let week = "";
 
-const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
+const PICK_DEADLINE_BUFFER_MS = 30 * 60 * 1000;
 
-// A game's pick deadline is 2 hours before its own kickoff. Returns null if
-// there's no usable kickoff_utc to compute a deadline from.
+// A game's pick deadline is 30 minutes before its own kickoff. Returns null
+// if there's no usable kickoff_utc to compute a deadline from.
 const getGameDeadlineMs = (game) => {
     if (!game.kickoff_utc) return null;
     const kickoffMs = new Date(game.kickoff_utc).getTime();
     if (isNaN(kickoffMs)) return null;
-    return kickoffMs - TWO_HOURS_MS;
+    return kickoffMs - PICK_DEADLINE_BUFFER_MS;
 };
 
 const nameElement = document.getElementById("name");
